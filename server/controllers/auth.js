@@ -4,17 +4,16 @@ import passport from 'passport';
 
 const router = express.Router();
 
-// Route to initiate Google login
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Route to handle Google callback
-router.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    // Successful authentication, redirect to frontend or send a response
-    res.redirect('http://localhost:3000'); // Adjust this as needed
-  }
-);
+router.get('/auth/google/callback', (req, res, next) => {
+  console.log(req.query);  
+  next();
+}, passport.authenticate('google', {
+  failureRedirect: '/login',
+}), (req, res) => {
+  res.redirect('http://localhost:3000');  
+});
+
 
 export default router;

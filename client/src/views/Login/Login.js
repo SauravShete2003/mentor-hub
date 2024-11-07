@@ -5,7 +5,7 @@ import googleLogo from './google-logo.jpg';
 function Login() {
     const googleAuth = () => {
         window.open(
-            `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/auth/google/callback`,
+            `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/auth/google`,
             "_self"
         );
     }

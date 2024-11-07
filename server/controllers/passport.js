@@ -6,7 +6,7 @@ passport.use(
     {
       clientID: "CLIENT_ID",
       clientSecret: "CLIENT_SECRET",
-      callbackURL: "http://localhost:3000/auth/google/callback",
+      callbackURL: "http://localhost:5000/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, done) {
       console.log(profile);
