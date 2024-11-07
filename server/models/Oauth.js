@@ -8,7 +8,7 @@ const OauthSchema = new Schema ({
     provider : {
         type : String,
         required : true,
-        enum : ['google' , 'facebook' , 'guthub']
+        enum : ['google' , 'facebook' , 'github']
     },
     accessToken:{
         tyep : String,

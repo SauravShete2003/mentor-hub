@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 
+
+import { postLogin, postSignup } from "./controllers/user.js";
+import emailRoutes from './controllers/emailRoutes.js'
 const app = express();
 const PORT = 5000;
 app.use(express.json());
@@ -20,6 +23,12 @@ const mongoDB = async () => {
   }
 };
 mongoDB();
+
+//nodemail
+app.use('/', emailRoutes);
+// user api
+app.post('/signup' , postSignup);
+app.post('/login' , postLogin);
 
 app.get("/health", (req, res) => {
   res.json({
