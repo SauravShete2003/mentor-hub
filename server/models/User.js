@@ -22,7 +22,7 @@ const userschema = new Schema(
     },
     oauthProvider: {
       type: String,
-      enum: ["google", "facebook", "github", null],
+      enum: ["google", null],
       default: null,
     },
     oauthId: {

@@ -8,7 +8,7 @@ import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 
-import { postLogin, postSignup } from "./controllers/user.js";
+import { postLogin, postSignup , refreshUserToken , userLogout} from "./controllers/user.js";
 import emailRoutes from "./controllers/emailRoutes.js";
 import router from "./controllers/auth.js";
 
@@ -82,6 +82,8 @@ app.get(
 // User API routes
 app.post('/signup', postSignup);
 app.post('/login', postLogin);
+app.post('/refreshToken' , refreshUserToken);
+app.post('/logout' , userLogout);
 
 // Health check route
 app.get("/health", (req, res) => {
