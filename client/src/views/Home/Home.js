@@ -1,25 +1,43 @@
-// Home.js
-
-import './Home.css';
+import "./Home.css";
+import axios from "axios";
+import sampleImg from "./../../assets/images/sample.jpeg"
 
 function Home(userDetails) {
-  const user = userDetails.user || {};
+  const user = userDetails.user || {};  
+     
+  const logout = async () => {
+    const token = localStorage.getItem("sessionToken");
 
-  const logOut = () => {
-    window.open(
-      `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/auth/logout`,
-      "_self"
-    );
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      localStorage.removeItem("sessionToken");
+      console.log("Logged out successfully!");
+
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
-
   return (
-    <div className='home-container'>
-      <h1 className='auth-heading'>Home</h1>
+    <div className="home-container">
+      <h1 className="auth-heading">Home</h1>
       <div className="user-info">
-        {user.picture && (
-          <img src={user.picture} alt='User' style={{ height: "300px", width: "300px" }} />
-        )}
+      <img
+            src={user.picture}
+            alt='User'
+            style={{ height: "200px", width: "200px", objectFit: "cover", borderRadius: "50%" }}
+          />
+
         <input
           type="text"
           placeholder="Full Name"
@@ -32,7 +50,9 @@ function Home(userDetails) {
           className="login-input"
           defaultValue={user.email || "Email not available"}
         />
-        <button className="auth-button" type='button' onClick={logOut}>Log Out</button>
+        <button className="auth-button" type="button" onClick={logout}>
+          Log Out
+        </button>
       </div>
     </div>
   );

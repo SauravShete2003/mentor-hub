@@ -7,8 +7,12 @@ import passport from "passport";
 import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
-
-import { postLogin, postSignup , refreshUserToken , userLogout} from "./controllers/user.js";
+import {
+  postLogin,
+  postSignup,
+  refreshUserToken,
+  userLogout,
+} from "./controllers/user.js";
 import emailRoutes from "./controllers/emailRoutes.js";
 import router from "./controllers/auth.js";
 
@@ -16,12 +20,25 @@ const app = express();
 const PORT = 5000;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true,
+}));
 
+function authenticateToken(req, res, next) {
+  const token = req.headers["authorization"]?.split("")[1];
+  if (!token) res.status(401).json({ message: "Unauthorized", success: false });
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden", success: false });
+    req.user = user;
+    next();
+  });
+}
 
 app.use(
   session({
-    secret: process.env.SECRET_KEY, 
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   })
@@ -65,25 +82,39 @@ passport.deserializeUser((user, done) => {
 });
 
 // Routes
-app.use("/auth", router); 
-app.use("/", emailRoutes); 
+app.use("/auth", router);
+app.use("/", emailRoutes);
 
 // Google OAuth routes
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect('http://localhost:3000'); 
+    res.redirect("http://localhost:3000");
   }
 );
 
+app.get("/auth/login/success", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json({ success: true, user: req.user });
+  } else {
+    res.status(401).json({ success: false, message: "Not authenticated" });
+  }
+});
+
 // User API routes
-app.post('/signup', postSignup);
-app.post('/login', postLogin);
-app.post('/refreshToken' , refreshUserToken);
-app.post('/logout' , userLogout);
+app.post("/signup", postSignup);
+app.post("/login", postLogin);
+app.post("/refreshToken", refreshUserToken);
+app.post("/logout", userLogout);
+app.get("/protected", authenticateToken, (req, res) => {
+  res.json({ message: "Protected content" });
+});
 
 // Health check route
 app.get("/health", (req, res) => {

@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import Session from "../models/Session.js";
+import dotenv from 'dotenv'
+dotenv.config()
 
 const postSignup = async (req, res) => {
   try {
@@ -16,8 +18,6 @@ const postSignup = async (req, res) => {
       profilePictures,
       bio,
     } = req.body;
-
-    // check oauthprovider and password
 
     if (!password) {
       return res.status(400).json({ message: "Please provide password." });
@@ -75,10 +75,7 @@ const postLogin = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password." });
-    }
-    if (user.password && !(await bcrypt.compare(password, user.password))) {
+    if (!user || (user.password && !(await bcrypt.compare(password, user.password)))) {
       return res.status(400).json({ message: "Invalid email or password." });
     }
 
@@ -93,30 +90,25 @@ const postLogin = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    const session = await Session.create({
+    await Session.create({
       userId: user._id,
       sessionToken,
-      expiresAt: new Date(Date.now()+ 15 *60 *1000),
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
-    
-    res.cookie("refreshToken" , refreshToken, {httpOnly : true});
-    res.status(200).json({ message: "Logged in successfully", token: sessionToken, success: true , user });
 
-    const token = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      }
-    );
-    res.json({ message: "User logged in successfully", token, success: true });
+    res.cookie('connect.sid', 'cookie_value', {
+      httpOnly: true,
+      secure: false,  
+      sameSite: 'None',  
+  });  
+    return res.status(200).json({ message: "Logged in successfully", token: sessionToken, success: true, user });
   } catch (err) {
     console.log(err);
-  }};
+    if (!res.headersSent) {
+      res.status(500).json({ message: "Server error during login" });
+    }
+  }
+};
 
   const refreshUserToken = async (req ,res)=>{
       const refreshToken = req.cookies.refreshToken;
@@ -147,5 +139,6 @@ const postLogin = async (req, res) => {
     res.clearCookie('refreshToken');
     res.status(200).json({message: "Logged out successfully", success: true});
   }
+
 
 export { postSignup, postLogin , refreshUserToken , userLogout };

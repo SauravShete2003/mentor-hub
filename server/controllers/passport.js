@@ -9,8 +9,12 @@ passport.use(
       callbackURL: "http://localhost:5000/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      return done(null, profile);
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
+      console.log("Profile:", profile);
+      if (!accessToken) {
+        return done(new Error("Access token not received"));
+      }
     }
   )
 );
