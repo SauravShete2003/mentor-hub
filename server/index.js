@@ -10,7 +10,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 import { postLogin, postSignup } from "./controllers/user.js";
 import emailRoutes from "./controllers/emailRoutes.js";
-import router from "./controllers/emailRoutes.js";
+import router from "./controllers/auth.js";
 
 const app = express();
 const PORT = 5000;
