@@ -12,6 +12,10 @@ import {
   postSignup,
   refreshUserToken,
   userLogout,
+  getUserById,
+  getUsers,
+  updateUser,
+  deleteUser
 } from "./controllers/user.js";
 import emailRoutes from "./controllers/emailRoutes.js";
 import router from "./controllers/auth.js";
@@ -115,6 +119,10 @@ app.post("/logout", userLogout);
 app.get("/protected", authenticateToken, (req, res) => {
   res.json({ message: "Protected content" });
 });
+app.get('/getUserById/:userId' , getUserById)
+app.get('/users' , getUsers)
+app.put('/user/:userId' , updateUser);
+app.delete('/user/:userId' , deleteUser);
 
 // Health check route
 app.get("/health", (req, res) => {
