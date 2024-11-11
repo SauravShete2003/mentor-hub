@@ -19,6 +19,7 @@ function App() {
         setUser(data.user._json);
       } else {
         setUser(null);
+        window.location.href='/login'
       }
     } catch (err) {
       console.error("Failed to fetch user:", err);
