@@ -1,4 +1,4 @@
-import Logout from "../../components/Logout/Logout";
+import UserDetails from "../UserDetails/UserDetails";
 import "./Home.css";
 
 
@@ -6,7 +6,7 @@ function Home(){
 
   return (
    <div>
-    <Logout/>
+    <UserDetails/>
    </div>
   );
 }

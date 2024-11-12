@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import "./Logout.css";
+import closeIcon from './../../assets/images/close.png';
 function Logout(userDetails) {
 
     const [showPopup, setShowPopup] = useState(false);
@@ -34,12 +35,10 @@ function Logout(userDetails) {
   return (
     <div className="home-container">
     <div className="user-info">
-      {/* Toggle Button */}
       <button className="toggle-button" onClick={togglePopup}>
         Profile Options
       </button>
 
-      {/* Popup */}
       {showPopup && (
         <div className="popup-container">
           <div className="popup-profile">
@@ -52,6 +51,7 @@ function Logout(userDetails) {
               <p className="popup-name">{user.name || "Name not available"}</p>
               <p className="popup-email">{user.email || "Email not available"}</p>
             </div>
+            <img src={closeIcon} className="close-image" onClick={() => setShowPopup(false)}  alt=""/>
             <button className="popup-logout-button" onClick={userLogout}>
               Log Out
             </button>

@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import Session from "../models/Session.js";
 import dotenv from "dotenv";
 dotenv.config();
+import mongoose from "mongoose";
 
 const postSignup = async (req, res) => {
   try {
@@ -178,25 +179,41 @@ const getUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { userId } = req.params;
-  const { profilePictures, bio, skills, name, email } = req.body;
-  const user = await User.findByIdAndUpdate(
-    { _id: userId },
-    {
-      $set: {
-        profilePictures,
-        bio,
-        skills,
-        fullName,
-        email,
+  
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid User ID" });
+  }
+  console.log(userId);
+  
+
+  const { profilePicture, bio, skills } = req.body;
+  
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          profilePicture,
+          bio,
+          skills
+        }
       },
-    },
-    { new: true }
-  );
-  res.json({
-    message: "User Updated Successfully",
-    data: user,
-    success: true,
-  });
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+
+    res.json({
+      message: "User updated successfully",
+      data: user,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
 };
 
 const deleteUser = async (req, res) => {

@@ -3,7 +3,7 @@ import googleLogo from "./../../assets/images/google-logo.png";
 import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-
+import avatarImg from "./../../assets/images/avatar.png";
 function Login() {
   const [user, setUser] = useState({
     email: "",
@@ -23,9 +23,13 @@ function Login() {
 
       if (response.data.success) {
         setUser({ email: "", password: "" });
+        console.log(response);
         toast.success(response.data.message);
         localStorage.setItem("token", response.data.token);
-        window.location.href = "/";
+        // settimeout
+        // setTimeout(() => {
+        //   window.location.href = "/";
+        // }, 2000);
       }
     } catch (error) {
       console.error(
@@ -49,36 +53,45 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h1>Welcome, {user.name || "Guest"}</h1>
-      <h1 className="auth-heading">Login Form</h1>
-      <div className="login-form">
-        <input
-          type="text"
-          placeholder="Email"
-          className="login-input"
-          value={user.email}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="login-input"
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
-        />
-        <button className="auth-button" type="button" onClick={userLogin}>
-          Login
-        </button>
-        <p>OR</p>
-        <button onClick={googleAuth} className="google-btn">
-          <img src={googleLogo} alt="Google Logo" className="google-icon" />
-          <span className="google-text">Sign in with Google</span>
-        </button>
-        <p>
-          New here? <Link to={"/signup"}>Sign Up</Link>
-        </p>
+      <h1 className="auth-heading">
+        👋 Welcome Back! Sign in to unlock a world of personalized experiences
+        crafted just for you. ✨
+      </h1>
+      <div className="auth-container">
+        <div>
+          <img src={avatarImg} className="auth-avatar" alt="" />
+        </div>
+        <div className="auth-form">
+          <input
+            type="text"
+            placeholder="Email"
+            className="login-input"
+            value={user.email}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="login-input"
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
+          />
+          <button className="auth-button" type="button" onClick={userLogin}>
+            Login
+          </button>
+          <p>OR</p>
+
+          <button onClick={googleAuth} className="google-btn">
+            <img src={googleLogo} alt="Google Logo" className="google-icon" />
+            <span className="google-text">Sign in with Google</span>
+          </button>
+          <p>
+            New here? <Link to={"/signup"}>Sign Up</Link>
+          </p>
+        </div>
       </div>
-      <Toaster /> {/* Displays success/error notifications */}
+
+      <Toaster />
     </div>
   );
 }

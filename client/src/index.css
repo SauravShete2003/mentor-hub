@@ -3,6 +3,7 @@ body {
   min-height: 99vh;
   padding: 0;
   margin: 0;
+  font-family: 'Roboto', sans-serif;
   background: lightblue;
   background: radial-gradient(
       circle,
@@ -67,53 +68,61 @@ body {
 }
 
 .login-container {
+  text-align: center;
+  width: 80%;
+  margin: 30px auto;
+  padding: 10px;
+  background-color: rgb(241, 234, 224);
+  border-radius: 8px;
+}
+
+.auth-container{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 20px;
+  justify-content: center;  
 }
 
 .auth-heading {
+  width: 80%;
+  margin: 5px auto;
   font-size: 24px;
-  margin-bottom: 20px;
 }
-
-.login-form {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.auth-avatar{
+  width: 250px;
 }
-
+.login-form{
+  display: block; 
+}
 .login-input {
+  border: 2px solid rgb(235, 187, 119);
+  border-radius: 8px;
+  margin: 10px;
+  width: 80%;
   padding: 10px;
   font-size: 16px;
 }
+.login-input:active , .login-input:focus{
+  outline: none;
 
-.auth-button, .google-btn {
-  padding: 10px;
+}
+.auth-button{
+  margin: 10px;
   font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  width: 80%;
   cursor: pointer;
+  
 }
-
-.google-icon {
-  width: 20px;
-  margin-right: 10px;
-}
-
-.google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* .google-btn {
+ .google-btn {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px auto;
-  width: 45%;
+  width: 50%;
   padding:10px;
   border-radius: 8px;
   background: #ffffff;
@@ -128,8 +137,8 @@ body {
 }
 
 .google-icon {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 }
 
 .google-text {
@@ -137,4 +146,9 @@ body {
   color: #333;
   margin-left: 10px;
   font-weight: 500;
-} */
+} 
+
+.login-user-heading{
+margin: 5px;
+font-size: 25px;
+}

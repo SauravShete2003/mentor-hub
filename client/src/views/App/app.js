@@ -4,6 +4,7 @@ import axios from "axios";
 import Login from "../Login/Login";
 import Signup from "../Signup/Signup";
 import Logout from "../../components/Logout/Logout";
+import UserDetails from "../UserDetails/UserDetails";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -40,9 +41,9 @@ function App() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h1 style={{ margin: "5px" }}>{user ? `Welcome, ${user.name}` : ""}</h1>
-      <Routes>
+    <div className="login-user-conatiner">
+      <h1 className="login-user-heading">{user ? `Welcome, ${user.name}` : ""}</h1>
+      <Routes >
         <Route
           exact
           path="/"
@@ -57,6 +58,7 @@ function App() {
           path="/signup"
           element={user ? <Navigate to="/" /> : <Signup />}
         />
+        <Route path="/user/:userId" element={<UserDetails />} />
       </Routes>
     </div>
   );
